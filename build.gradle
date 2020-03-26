@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+group 'dev.nesz.simple_yaml'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.26'
+}
+
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
