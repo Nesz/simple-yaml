@@ -10,11 +10,13 @@ import java.util.Map;
 public class ProxyTrafficHandler implements InvocationHandler {
 
     private final YamlData data;
+    private final Class<?> wrapped;
     private final NamingStrategy strategy;
     private final Map<String, String> setters;
 
-    public ProxyTrafficHandler(YamlData data, NamingStrategy strategy, Map<String, String> setters) {
+    public ProxyTrafficHandler(YamlData data, Class<?> wrapped, NamingStrategy strategy, Map<String, String> setters) {
         this.data = data;
+        this.wrapped = wrapped;
         this.setters = setters;
         this.strategy = strategy;
     }
@@ -32,10 +34,21 @@ public class ProxyTrafficHandler implements InvocationHandler {
 
         String methodName = strategy.apply(method.getName());
         String path = method.getDeclaringClass().toString();
-        path = path.replace("$", ".").toLowerCase();
-        path += "." + methodName;
-        path = path.substring(path.indexOf(".") + 1);
-
+        path = path.replaceAll("\\s+",""); //replace spaces
+        path = path.replaceFirst("\\$", "");
+        path = path.replaceAll("\\$", ".");
+        path = path.replace("interface", "");
+        path = splitByLastOccurrence(path, wrapped.getName());
+        if (!path.isEmpty()) {
+            path += ".";
+        }
+        path += methodName;
+        path = path.toLowerCase();
         return data.get(path);
+    }
+
+    private String splitByLastOccurrence(String path, String occ) {
+        String[] split = path.split(occ);
+        return split.length > 0 ? split[split.length - 1] : "";
     }
 }

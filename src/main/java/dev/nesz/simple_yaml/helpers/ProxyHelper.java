@@ -2,6 +2,7 @@ package dev.nesz.simple_yaml.helpers;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 

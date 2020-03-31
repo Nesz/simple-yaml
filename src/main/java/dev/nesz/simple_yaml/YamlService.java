@@ -63,7 +63,7 @@ public class YamlService {
         adapt(clazz, "", strategy, data);
 
         Map<String, String> setters = mapSetters(clazz, new LinkedHashMap<>(), "", strategy);
-        return ProxyHelper.proxyingWithSubInterfaces(clazz, new ProxyTrafficHandler(data, strategy, setters));
+        return ProxyHelper.proxyingWithSubInterfaces(clazz, new ProxyTrafficHandler(data, clazz, strategy, setters));
     }
 
     private <T> void adapt(Class<T> clazz, String path, NamingStrategy strategy, YamlData data) {
