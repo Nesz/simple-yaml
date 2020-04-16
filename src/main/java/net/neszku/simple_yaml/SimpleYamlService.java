@@ -1,11 +1,11 @@
-package dev.nesz.simple_yaml;
+package net.neszku.simple_yaml;
 
-import dev.nesz.simple_yaml.adapter.TypeAdapter;
-import dev.nesz.simple_yaml.annotations.Refers;
-import dev.nesz.simple_yaml.helpers.LookupHelper;
-import dev.nesz.simple_yaml.helpers.ProxyHelper;
-import dev.nesz.simple_yaml.helpers.reflect.ReflectionHelper;
-import dev.nesz.simple_yaml.naming.NamingStrategy;
+import net.neszku.simple_yaml.adapter.TypeAdapter;
+import net.neszku.simple_yaml.steorotype.Refers;
+import net.neszku.simple_yaml.helpers.LookupHelper;
+import net.neszku.simple_yaml.helpers.ProxyHelper;
+import net.neszku.simple_yaml.helpers.reflections.ReflectionHelper;
+import net.neszku.simple_yaml.naming.NamingStrategy;
 import org.yaml.snakeyaml.Yaml;
 
 import java.lang.reflect.Method;
@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class YamlService {
+public class SimpleYamlService {
 
     private final Yaml yaml;
     private final List<TypeAdapter<?>> adapters;
 
-    public YamlService(YamlBuilder builder) {
+    public SimpleYamlService(SimpleYamlBuilder builder) {
         this.adapters = builder.adapters;
         this.yaml = new Yaml(
             builder.representer,
@@ -28,11 +28,11 @@ public class YamlService {
         );
     }
 
-    public List<TypeAdapter<?>> getAdapters() {
+    public List<TypeAdapter<?>> getTypeAdapters() {
         return adapters;
     }
 
-    public TypeAdapter<?> getAdapterFor(Class<?> clazz) {
+    public TypeAdapter<?> getTypeAdapterFor(Class<?> clazz) {
         return adapters.stream()
                 .filter(adapter -> adapter.getType().isAssignableFrom(clazz))
                 .findAny()
@@ -40,7 +40,7 @@ public class YamlService {
     }
 
 
-    public String dump(YamlData data) {
+    public String dump(SimpleYamlData data) {
         return yaml.dump(data.dataMap);
     }
 
@@ -58,7 +58,7 @@ public class YamlService {
 
     public <T> T load(Class<T> clazz, String yamlString) {
         NamingStrategy strategy = ReflectionHelper.getStrategy(clazz);
-        YamlData data = new YamlData(yaml.load(yamlString));
+        SimpleYamlData data = new SimpleYamlData(yaml.load(yamlString));
 
         adapt(clazz, "", strategy, data);
 
@@ -66,7 +66,7 @@ public class YamlService {
         return ProxyHelper.proxyingWithSubInterfaces(clazz, new ProxyTrafficHandler(data, clazz, strategy, setters));
     }
 
-    private <T> void adapt(Class<T> clazz, String path, NamingStrategy strategy, YamlData data) {
+    private <T> void adapt(Class<T> clazz, String path, NamingStrategy strategy, SimpleYamlData data) {
         for (Method method : clazz.getDeclaredMethods()) {
             if (!method.isDefault()) {
                 continue;
@@ -88,7 +88,7 @@ public class YamlService {
         }
     }
 
-    private Map<String, Object> getDefaultValues(Class<?> clazz, Object instance, YamlService yaml, NamingStrategy strategy) {
+    private Map<String, Object> getDefaultValues(Class<?> clazz, Object instance, SimpleYamlService yaml, NamingStrategy strategy) {
 
         Map<String, Object> values = new LinkedHashMap<>();
         for (Method method : clazz.getDeclaredMethods()) {
@@ -114,7 +114,7 @@ public class YamlService {
         return values;
     }
 
-    private Object handle(Object object, Method method, YamlService yaml, Operation operation) {
+    private Object handle(Object object, Method method, SimpleYamlService yaml, Operation operation) {
         List<Class<?>> generics = ReflectionHelper.getGenericReturnType(method);
         Class<?> clazz = method.getReturnType();
 
@@ -126,7 +126,7 @@ public class YamlService {
             return handleMap(cast(object), generics.get(0), generics.get(1), yaml, operation);
         }
 
-        TypeAdapter<?> adapter = yaml.getAdapterFor(clazz);
+        TypeAdapter<?> adapter = yaml.getTypeAdapterFor(clazz);
         if (adapter != null) {
             if (Operation.SERIALIZE == operation)
                 return adapter.getAdapter().serialize(cast(object));
@@ -137,12 +137,12 @@ public class YamlService {
         return object;
     }
 
-    private Map<?, ?> handleMap(Map<?, ?> map, Class<?> K, Class<?> V, YamlService yaml, Operation operation) {
+    private Map<?, ?> handleMap(Map<?, ?> map, Class<?> K, Class<?> V, SimpleYamlService yaml, Operation operation) {
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             Object kv = entry.getKey();
             Object vv = entry.getValue();
-            TypeAdapter<?> keyAdapter = yaml.getAdapterFor(K);
-            TypeAdapter<?> valAdapter = yaml.getAdapterFor(V);
+            TypeAdapter<?> keyAdapter = yaml.getTypeAdapterFor(K);
+            TypeAdapter<?> valAdapter = yaml.getTypeAdapterFor(V);
 
             if (keyAdapter != null) {
                 map.remove(kv);
@@ -170,8 +170,8 @@ public class YamlService {
         return map;
     }
 
-    private Collection<?> handleCollection(Collection<?> collection, Class<?> generic, YamlService yaml, Operation operation) {
-        TypeAdapter<?> adapter = yaml.getAdapterFor(generic);
+    private Collection<?> handleCollection(Collection<?> collection, Class<?> generic, SimpleYamlService yaml, Operation operation) {
+        TypeAdapter<?> adapter = yaml.getTypeAdapterFor(generic);
         if (adapter != null) {
             if (Operation.DESERIALIZE == operation) {
                 return collection.stream()

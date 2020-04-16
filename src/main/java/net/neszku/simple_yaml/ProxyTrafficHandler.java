@@ -1,7 +1,7 @@
-package dev.nesz.simple_yaml;
+package net.neszku.simple_yaml;
 
-import dev.nesz.simple_yaml.annotations.Include;
-import dev.nesz.simple_yaml.naming.NamingStrategy;
+import net.neszku.simple_yaml.steorotype.Include;
+import net.neszku.simple_yaml.naming.NamingStrategy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -9,12 +9,12 @@ import java.util.Map;
 
 public class ProxyTrafficHandler implements InvocationHandler {
 
-    private final YamlData data;
+    private final SimpleYamlData data;
     private final Class<?> wrapped;
     private final NamingStrategy strategy;
     private final Map<String, String> setters;
 
-    public ProxyTrafficHandler(YamlData data, Class<?> wrapped, NamingStrategy strategy, Map<String, String> setters) {
+    public ProxyTrafficHandler(SimpleYamlData data, Class<?> wrapped, NamingStrategy strategy, Map<String, String> setters) {
         this.data = data;
         this.wrapped = wrapped;
         this.setters = setters;
@@ -42,8 +42,10 @@ public class ProxyTrafficHandler implements InvocationHandler {
         if (!path.isEmpty()) {
             path += ".";
         }
+        path = strategy.apply(path);
         path += methodName;
         path = path.toLowerCase();
+
         return data.get(path);
     }
 

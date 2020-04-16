@@ -1,4 +1,4 @@
-package dev.nesz.simple_yaml.annotations;
+package net.neszku.simple_yaml.steorotype;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

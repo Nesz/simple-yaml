@@ -1,4 +1,4 @@
-package dev.nesz.simple_yaml;
+package net.neszku.simple_yaml;
 
 public enum Operation {
     SERIALIZE,

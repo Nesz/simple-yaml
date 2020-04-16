@@ -1,6 +1,7 @@
-package dev.nesz.simple_yaml.helpers.reflect;
+package net.neszku.simple_yaml.helpers.reflections;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public class ReflectConstructor<T> {
 
@@ -13,7 +14,7 @@ public class ReflectConstructor<T> {
         this.parameterTypes = parameterTypes;
     }
 
-    private void init() throws Exception {
+    private void init() throws NoSuchMethodException {
         if (constructor == null) {
             constructor = clazz.getDeclaredConstructor(parameterTypes);
             constructor.setAccessible(true);
@@ -21,7 +22,8 @@ public class ReflectConstructor<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public T newInstance(Object... initargs) throws Exception {
+    public T newInstance(Object... initargs) throws IllegalAccessException, InvocationTargetException,
+                                                    InstantiationException, NoSuchMethodException {
         init();
         return (T) constructor.newInstance(initargs);
     }

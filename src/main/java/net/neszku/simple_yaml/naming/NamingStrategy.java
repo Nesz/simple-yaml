@@ -1,4 +1,4 @@
-package dev.nesz.simple_yaml.naming;
+package net.neszku.simple_yaml.naming;
 
 import java.util.function.Function;
 

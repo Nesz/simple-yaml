@@ -1,7 +1,7 @@
-package dev.nesz.simple_yaml.helpers.reflect;
+package net.neszku.simple_yaml.helpers.reflections;
 
-import dev.nesz.simple_yaml.naming.NamingStrategy;
-import dev.nesz.simple_yaml.naming.PropertyNamingStrategy;
+import net.neszku.simple_yaml.naming.NamingStrategy;
+import net.neszku.simple_yaml.naming.PropertyNamingStrategy;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -38,6 +38,20 @@ public class ReflectionHelper {
         }
 
         return strategies[0].value();
+    }
+
+    public static List<Class<?>> getInterfaces(Class<?> clazz) {
+        List<Class<?>> interfaces = new LinkedList<>();
+
+        interfaces.add(clazz);
+        for (Class<?> sub : clazz.getDeclaredClasses()) {
+            if (!sub.isInterface()) {
+                continue;
+            }
+            interfaces.addAll(getInterfaces(sub));
+        }
+
+        return interfaces;
     }
 
 }

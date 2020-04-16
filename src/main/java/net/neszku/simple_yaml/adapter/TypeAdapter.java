@@ -1,4 +1,4 @@
-package dev.nesz.simple_yaml.adapter;
+package net.neszku.simple_yaml.adapter;
 
 public class TypeAdapter<T> {
 
@@ -20,6 +20,9 @@ public class TypeAdapter<T> {
 
     @Override
     public String toString() {
-        return type.getSimpleName() + " = " + adapter.getClass().getSimpleName();
+        return "TypeAdapter{" +
+                "type=" + type +
+                ", adapter=" + adapter +
+                '}';
     }
 }

@@ -1,9 +1,9 @@
-package dev.nesz.simple_yaml;
+package net.neszku.simple_yaml;
 
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.representer.Representer;
 
-public class YamlConstants {
+public class SimpleYamlConstants {
 
     public static final DumperOptions DEFAULT_DUMPER      = new DumperOptions();
     public static final Representer   DEFAULT_REPRESENTER = new Representer();

@@ -1,6 +1,6 @@
-package dev.nesz.simple_yaml.helpers;
+package net.neszku.simple_yaml.helpers;
 
-import dev.nesz.simple_yaml.helpers.reflect.ReflectConstructor;
+import net.neszku.simple_yaml.helpers.reflections.ReflectConstructor;
 
 import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.reflect.Method;

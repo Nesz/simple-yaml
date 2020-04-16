@@ -1,15 +1,15 @@
-package dev.nesz.simple_yaml;
+package net.neszku.simple_yaml;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class YamlData {
+public class SimpleYamlData {
 
     private static final int END = -1;
 
     protected final Map<String, Object> dataMap;
 
-    public YamlData(Map<String, Object> dataMap) {
+    public SimpleYamlData(Map<String, Object> dataMap) {
         this.dataMap = dataMap;
     }
 

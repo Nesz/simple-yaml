@@ -1,10 +1,9 @@
-package dev.nesz.simple_yaml.helpers;
+package net.neszku.simple_yaml.helpers;
+
+import net.neszku.simple_yaml.helpers.reflections.ReflectionHelper;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class ProxyHelper {
 
@@ -15,7 +14,7 @@ public class ProxyHelper {
     }
 
     public static <T> T proxyingWithSubInterfaces(Class<T> clazz, InvocationHandler handler) {
-        Class<?>[] interfaces = getInterfaces(clazz).toArray(new Class<?>[0]);
+        Class<?>[] interfaces = ReflectionHelper.getInterfaces(clazz).toArray(new Class<?>[0]);
         return proxying(clazz, interfaces, handler);
     }
 
@@ -34,19 +33,4 @@ public class ProxyHelper {
                 interfaces,
                 handler);
     }
-
-    public static List<Class<?>> getInterfaces(Class<?> clazz) {
-        List<Class<?>> interfaces = new LinkedList<>();
-
-        interfaces.add(clazz);
-        for (Class<?> sub : clazz.getDeclaredClasses()) {
-            if (!sub.isInterface()) {
-                continue;
-            }
-            interfaces.addAll(getInterfaces(sub));
-        }
-
-        return interfaces;
-    }
-
 }

@@ -1,13 +1,14 @@
-package dev.nesz.simple_yaml.annotations;
+package net.neszku.simple_yaml.naming;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Include {
+public @interface PropertyNamingStrategy {
+
+    NamingStrategy value();
 
 }
-
