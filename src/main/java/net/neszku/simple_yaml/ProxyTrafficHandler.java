@@ -41,8 +41,8 @@ public class ProxyTrafficHandler implements InvocationHandler {
         path = splitByLastOccurrence(path, wrapped.getName());
         if (!path.isEmpty()) {
             path += ".";
+            path = strategy.apply(path);
         }
-        path = strategy.apply(path);
         path += methodName;
         path = path.toLowerCase();
 
