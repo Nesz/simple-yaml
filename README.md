@@ -1,7 +1,6 @@
 ## Usage
 
 ```java
-@PropertyNamingStrategy(NamingStrategy.HYPHEN_CASE)
 public interface TestConfig {
 
     default Motor getMotor() {
